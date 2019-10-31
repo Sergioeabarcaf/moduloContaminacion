@@ -5,7 +5,7 @@ import converterTime
 import time
 
 # Funcion para obtener datos de medicion y enviarlos a firebase y CSV.
-def getData(dirFile, module, sessionNumber):
+def getData():
     data = {'timestamp': converterTime.getTimestamp()}
     data.update(sensorBME280.getTHPJSON())
 
