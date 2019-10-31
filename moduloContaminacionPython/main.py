@@ -12,9 +12,9 @@ def getData(dirFile, module, sessionNumber):
     print data
 
 while True:
-    // pedir datos de sensores y guardarlos en un json.
+    # pedir datos de sensores y guardarlos en un json.
     getData()
     time.sleep(10)
 
-    // enviar los datos a firebase
+    # enviar los datos a firebase
 
