@@ -15,4 +15,5 @@ def getTHPJSON():
   # compensated_reading object
   data = bme280.sample(bus, address, calibration_params)
 
+  # C, hPa, %
   return {'t': data.temperature, 'h': data.humidity, 'p': data.pressure}
