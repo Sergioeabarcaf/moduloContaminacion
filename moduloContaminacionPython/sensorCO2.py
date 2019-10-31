@@ -1,6 +1,15 @@
 # REF: https://github.com/adafruit/Adafruit_CircuitPython_CCS811
 # 
 
+# Error:
+# Traceback (most recent call last):
+#   File "sensorCO2.py", line 10, in <module>
+#     ccs811 = adafruit_ccs811.CCS811(i2c)
+#   File "/home/pi/.local/lib/python3.7/site-packages/adafruit_ccs811.py", line 104, in __init__
+#     raise RuntimeError("Device ID returned is not correct! Please check your wiring.")
+# RuntimeError: Device ID returned is not correct! Please check your wiring.
+
+
 import time
 import board
 import busio
