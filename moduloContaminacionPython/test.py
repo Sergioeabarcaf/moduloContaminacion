@@ -27,7 +27,7 @@ import serial, struct, time
 
 ser = serial.Serial()
 #ser.port = sys.argv[1]
-ser.port = "/dev/ttyUSB0"
+ser.port = "/dev/serial1"
 ser.baudrate = 9600
 
 ser.open()
@@ -102,14 +102,10 @@ def sensor_sleep():
 	for b in bytes:
 		ser.write(b)
 
-def main(args):
-	sensor_wake()
-	time.sleep(15)
-	ser.flushInput()
-	sensor_read()
-	time.sleep(5)
-	sensor_sleep()
 
-if __name__ == '__main__':
-    import sys
-    sys.exit(main(sys.argv))
+sensor_wake()
+time.sleep(15)
+ser.flushInput()
+sensor_read()
+time.sleep(5)
+sensor_sleep()
