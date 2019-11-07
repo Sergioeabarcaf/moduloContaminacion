@@ -13,7 +13,7 @@ while(True):
         x = x.decode(encoding)
         contenido = x.split(':')
         if(contenido[0] != 'WARNING'):
-            data.update(contenido[0]:contenido[1], 'timestamp': time.time())
+            data.update({contenido[0]:str(contenido[1]).replace('\r\n',''), 'timestamp': time.time()})
             print(data)
 
         if(contenido[0] == 'ERROR'):
