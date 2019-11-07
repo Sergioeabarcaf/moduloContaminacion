@@ -17,7 +17,7 @@ while(True):
         if(contenido[0] == 'ERROR'):
             print(x)
         else:
-            data.update({contenido[0]: contenido[1].replace('\r\n'), 'timestamp': time.time()})
+            data.update({contenido[0]: contenido[1].replace('\r\n',''), 'timestamp': time.time()})
             print(data)
     else:
         print('Comunicación Serial cerrada.')
