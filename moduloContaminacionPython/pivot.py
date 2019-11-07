@@ -1,5 +1,6 @@
 import serial
 import time
+import log
 
 ser = serial.Serial('/dev/ttyACM0')
 ser.baudrate = 9600
@@ -19,5 +20,6 @@ while(True):
         else:
             data.update({contenido[0]: contenido[1].replace('\r\n',''), 'timestamp': time.time()})
             print(data)
+            log.saveBackup(data)
     else:
         print('Comunicación Serial cerrada.')
