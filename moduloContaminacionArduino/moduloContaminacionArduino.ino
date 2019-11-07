@@ -68,20 +68,19 @@ void setupBME280(){
   while(!Serial) {} // Wait
   Wire.begin();
   while(!bme.begin()){
-    Serial.println("Could not find BME280 sensor!");
+    Serial.println("ERROR: Could not find BME280 sensor!");
     delay(1000);
   }
   
-  // bme.chipID(); // Deprecated. See chipModel().
   switch(bme.chipModel()){
      case BME280::ChipModel_BME280:
-       Serial.println("Found BME280 sensor! Success.");
+       Serial.println("WARNING:Found BME280 sensor! Success.");
        break;
      case BME280::ChipModel_BMP280:
-       Serial.println("Found BMP280 sensor! No Humidity available.");
+       Serial.println("WARNING:Found BMP280 sensor! No Humidity available.");
        break;
      default:
-       Serial.println("Found UNKNOWN sensor! Error!");
+       Serial.println("WARNING:Found UNKNOWN sensor! Error!");
   }
 }
 
@@ -104,7 +103,7 @@ void dataBME280(){
 // Funciones CO2 ////////////////////////////////////////////////////
 void setupCO2(){
   if(!ccs.begin()){
-    Serial.println("Fallo en sensor CO2");
+    Serial.println("ERROR:Fallo en sensor CO2");
     while(1);
   }
 
@@ -120,7 +119,7 @@ void dataCO2(){
     }
   }
   else{
-      Serial.println("Sensor CO2 no disponible");
+      Serial.println("ERROR:Sensor CO2 no disponible");
       delay(1000);
   }
 }
