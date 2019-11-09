@@ -10,24 +10,27 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
+// DHT11 ////////////////////////////////////////////////////////////
+#include <DHT.h>
+
 
 
 // VARIABLES -----------------------------------------------------
 #define SERIAL_BAUD 9600
-#define seconds 10000
+#define seconds 60000
 String aux;
 
 // BME280 /////////////////////////////////////////////////////////
 BME280I2C bme;
-String tempStr = "T:";
-String humStr = "H:";
-String presStr = "P:";
-float temp(NAN), hum(NAN), pres(NAN);
+String tempBMStr = "BM-T:";
+String humBMStr = "BM-H:";
+String presBMStr = "BM-P:";
+float tempBMValue(NAN), humBMValue(NAN), presBMValue(NAN);
 
 // CO2 ////////////////////////////////////////////////////////////
 Adafruit_CCS811 ccs;
 String co2Str = "CO2:";
-float co2;
+float co2Value;
 
 // PM /////////////////////////////////////////////////////////////
 #define LENG 31   //0x42 + 31 bytes equal to 32 bytes
@@ -40,23 +43,41 @@ int PM2_5Value=0;
 int PM10Value=0;
 SoftwareSerial PMSerial(10, 11); // RX, TX
 
+// Light ambient //////////////////////////////////////////////////
+#define lightPin 0
+String lightStr = "L:";
+int lightValue = 0;
+
+// DHT //////////////////////////////////////////////////
+#define pindht 2
+#define DHTTYPE DHT22 // DHT 22 (AM2302)
+DHT dht (pindht, DHTTYPE);
+String tempDHStr = "DH-T:";
+String humDHStr = "DH-H:";
+float tempDHValue, humDHValue;
+
 
 
 // Setup //////////////////////////////////////////////////////////
 void setup(){
-  Serial.begin(SERIAL_BAUD);
   setupBME280();
   setupCO2();
   setupPM();
+  delay(120000);
 }
 
 
 
 // loop ///////////////////////////////////////////////////////////
 void loop(){
+   Serial.begin(SERIAL_BAUD);
    dataBME280();
    dataCO2();
    dataPM();
+   dataLight();
+   dataDHT();
+   Serial.flush();
+   Serial.end();
    delay(seconds);
 }
 
@@ -85,17 +106,15 @@ void setupBME280(){
 }
 
 void dataBME280(){
- 
-
   BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
   BME280::PresUnit presUnit(BME280::PresUnit_hPa);
-  bme.read(pres, temp, hum, tempUnit, presUnit);
+  bme.read(presBMValue, tempBMValue, humBMValue, tempUnit, presUnit);
 
-  aux = tempStr + temp;
+  aux = tempBMStr + tempBMValue;
   Serial.println(aux);
-  aux = humStr + hum;
+  aux = humBMStr + humBMValue;
   Serial.println(aux);
-  aux = presStr + pres;
+  aux = presBMStr + presBMValue;
   Serial.println(aux);
 }
 
@@ -113,8 +132,8 @@ void setupCO2(){
 void dataCO2(){
   if(ccs.available()){
     if(!ccs.readData()){
-      co2 = ccs.geteCO2();
-      aux = co2Str + co2;
+      co2Value = ccs.geteCO2();
+      aux = co2Str + co2Value;
       Serial.println(aux);
     }
   }
@@ -191,4 +210,24 @@ int transmitPM10(unsigned char *thebuf)
   int PM10Val;
   PM10Val=((thebuf[7]<<8) + thebuf[8]); //count PM10 value of the air detector module  
   return PM10Val;
+}
+
+
+// Funciones Light //////////////////////////////////////////////////
+void dataLight(){
+  lightValue = analogRead(lightPin);
+  aux = lightStr + lightValue;
+  Serial.println(aux);
+}
+
+
+// Funciones DHT //////////////////////////////////////////////////
+void dataDHT(){
+  tempDHValue = dht.readTemperature();
+  humDHValue = dht.readHumidity();
+  
+  aux = humDHStr + humDHValue;
+  Serial.println(aux);
+  aux = tempDHStr + tempDHValue;
+  Serial.println(aux);
 }
