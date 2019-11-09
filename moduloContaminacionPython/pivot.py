@@ -1,6 +1,7 @@
 import serial
 import log
 import timeCustom
+import goToFirebase
 
 ser = serial.Serial('/dev/ttyACM0')
 ser.baudrate = 9600
@@ -22,6 +23,7 @@ while(True):
             print(contenido)
         else:
             data.update({contenido[0]: contenido[1].replace('\r\n',''), 'timestamp': timeCustom.getTimestamp()})
+            goToFirebase.send(timeCustom.getTimestamp(), contenido[0], contenido[1])
             print(data)
             log.saveBackup(data)
     else:
