@@ -36,7 +36,7 @@ float co2Value;
 #define LENG 31   //0x42 + 31 bytes equal to 32 bytes
 unsigned char buf[LENG];
 String pm1Str = "PM1:";
-String pm25Str = "PM2.5:";
+String pm25Str = "PM2-5:";
 String pm10Str = "PM10:";
 int PM01Value=0;
 int PM2_5Value=0;
