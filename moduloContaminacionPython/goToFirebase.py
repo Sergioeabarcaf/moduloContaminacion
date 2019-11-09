@@ -13,5 +13,5 @@ def send(timestamp,param,value):
     urlDevice = 'data' + param + "/"
     ref = db.reference(urlDevice)
     dataSend["timestamp"] = timestamp
-    dataSend["values"] = value
+    dataSend["value"] = value
     ref.push(dataSend)

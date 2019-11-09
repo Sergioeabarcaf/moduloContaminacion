@@ -22,7 +22,10 @@ while(True):
             print("hubo error desconocido")
             print(contenido)
         else:
-            data.update({contenido[0]: contenido[1].replace('\r\n',''), 'timestamp': timeCustom.getTimestamp()})
+            contenido[1] = contenido[1].replace('\r\n','')
+            if(contenido[0] == "PM2.5"):
+                contenido[0] = "PM2-5"
+            data.update({contenido[0]: contenido[1], 'timestamp': timeCustom.getTimestamp()})
             goToFirebase.send(timeCustom.getTimestamp(), contenido[0], contenido[1])
             print(data)
             log.saveBackup(data)
