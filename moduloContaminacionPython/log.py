@@ -52,3 +52,12 @@ def recivedExcept(datetime, error):
     f.write(str(error[1]))
     f.close()
     return True
+
+# Funcion para almacenar en archivo TXT el error de arduino
+def recivedErrorArduino(datetime, error):
+    f = open("./errorArduino.txt", "a")
+    f.write("=====================\n")
+    f.write(datetime + "  \n")
+    f.write(str(error))
+    f.close()
+    return True
