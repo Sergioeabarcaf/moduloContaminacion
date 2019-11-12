@@ -7,7 +7,7 @@ def getTimestamp():
 
 # Retornar Date en formato ddmmaaaa
 def getCurrentDateSTR():
-    return time.strftime('%d%m%Y')
+    return time.strftime('%d-%m-%Y')
 
 # Retornar Hora y fecha actual para log
 def getCurrenDateAndTimeSTR():

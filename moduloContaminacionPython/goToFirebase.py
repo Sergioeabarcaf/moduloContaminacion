@@ -10,7 +10,7 @@ default_app = firebase_admin.initialize_app(cred, {
 # Almacenar data en registro historico
 def send(timestamp,param,value):
     dataSend = {}
-    urlDevice = 'data' + param + "/"
+    urlDevice = 'data/' + param + "/"
     ref = db.reference(urlDevice)
     dataSend["timestamp"] = timestamp
     dataSend["value"] = value
