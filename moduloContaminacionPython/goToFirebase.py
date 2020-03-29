@@ -4,7 +4,7 @@ from firebase_admin import db
 
 cred = credentials.Certificate('dogKey.json')
 default_app = firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://airea-app.firebaseio.com/'
+    'databaseURL': ''
 })
 
 # Almacenar data en registro historico
