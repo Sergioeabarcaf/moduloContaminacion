@@ -1,17 +1,21 @@
 // LIBRERIAS ------------------------------------------------------
 // BME280 ////////////////////////////////////////////////////////
+// https://github.com/finitespace/BME280#methods
 #include <BME280I2C.h>
 #include <Wire.h>
 
 // CO2 ///////////////////////////////////////////////////////////
+//https://learn.adafruit.com/adafruit-ccs811-air-quality-sensor/arduino-wiring-test
 #include "Adafruit_CCS811.h"
 
 // PM ////////////////////////////////////////////////////////////
+// https://wiki.dfrobot.com/PM2.5_laser_dust_sensor_SKU_SEN0177
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
 // DHT11 ////////////////////////////////////////////////////////////
-#include <DHT.h>
+// https://www.dfrobot.com/product-174.html
+#include <dht11.h>
 
 
 
@@ -50,8 +54,8 @@ int lightValue = 0;
 
 // DHT //////////////////////////////////////////////////
 #define pindht 2
-#define DHTTYPE DHT22 // DHT 22 (AM2302)
-DHT dht (pindht, DHTTYPE);
+dht11 DHT;
+int chk;
 String tempDHStr = "DH-T:";
 String humDHStr = "DH-H:";
 float tempDHValue, humDHValue;
@@ -89,19 +93,19 @@ void setupBME280(){
   while(!Serial) {} // Wait
   Wire.begin();
   while(!bme.begin()){
-    Serial.println("ERROR: Could not find BME280 sensor!");
+    Serial.println("ERROR: BME - Could not find BME280 sensor!");
     delay(1000);
   }
   
   switch(bme.chipModel()){
      case BME280::ChipModel_BME280:
-       Serial.println("WARNING:Found BME280 sensor! Success.");
+       Serial.println("WARNING: BME - Found BME280 sensor! Success.");
        break;
      case BME280::ChipModel_BMP280:
-       Serial.println("WARNING:Found BMP280 sensor! No Humidity available.");
+       Serial.println("WARNING: BME - Found BMP280 sensor! No Humidity available.");
        break;
      default:
-       Serial.println("WARNING:Found UNKNOWN sensor! Error!");
+       Serial.println("WARNING: BME - Found UNKNOWN sensor! Error!");
   }
 }
 
@@ -112,8 +116,8 @@ void dataBME280(){
 
   aux = tempBMStr + tempBMValue;
   Serial.println(aux);
-  aux = humBMStr + humBMValue;
-  Serial.println(aux);
+  //aux = humBMStr + humBMValue;
+  //Serial.println(aux);
   aux = presBMStr + presBMValue;
   Serial.println(aux);
 }
@@ -122,7 +126,7 @@ void dataBME280(){
 // Funciones CO2 ////////////////////////////////////////////////////
 void setupCO2(){
   if(!ccs.begin()){
-    Serial.println("ERROR:Fallo en sensor CO2");
+    Serial.println("ERROR: CO2 - Fallo en sensor CO2");
     while(1);
   }
 
@@ -138,7 +142,7 @@ void dataCO2(){
     }
   }
   else{
-      Serial.println("ERROR:Sensor CO2 no disponible");
+      Serial.println("ERROR: CO2 - Sensor CO2 no disponible");
       delay(1000);
   }
 }
@@ -223,11 +227,26 @@ void dataLight(){
 
 // Funciones DHT //////////////////////////////////////////////////
 void dataDHT(){
-  tempDHValue = dht.readTemperature();
-  humDHValue = dht.readHumidity();
+  chk = DHT.read(pindht);
+  switch (chk){
+    case DHTLIB_OK:
+                break;
+    case DHTLIB_ERROR_CHECKSUM:
+                Serial.print("ERROR: DHT11 - Checksum\t");
+                break;
+    case DHTLIB_ERROR_TIMEOUT:
+                Serial.print("ERROR: DHT11 - Time out\t");
+                break;
+    default:
+                Serial.print("ERROR: DHT11 - Unknown\t");
+                break;
+  }
+
+  tempDHValue = DHT.temperature;
+  humDHValue = DHT.humidity;
   
   aux = humDHStr + humDHValue;
   Serial.println(aux);
-  aux = tempDHStr + tempDHValue;
-  Serial.println(aux);
+  //aux = tempDHStr + tempDHValue;
+  //Serial.println(aux);
 }
